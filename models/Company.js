@@ -1,51 +1,33 @@
 const mongoose = require('mongoose');
 const validator = require('validator');
 const { ObjectId } = mongoose.Schema.Types
-const jobSchema = mongoose.Schema({
-    title: {
+const companySchema = mongoose.Schema({
+    name: {
         type: String,
         trim: true,
-        required: [true, "Please provide a job title"],
+        required: [true, "Please provide a brand name"],
         maxLength: 100,
+        unique: true,
         lowercase: true
     },
-    type: {
-        type: String,
-        enum: ["part-time", "full-time", "internship"]
-    },
-    salaryRange: String,
     description: String,
+    email: {
+        type: String,
+        validate: [validator.isEmail, "Please provide a valid email"],
+        lowercase: true
+    },
     website: {
         type: String,
         validate: [validator.isURL, "Please provide a valid website"]
-    },
-    company: {
-        name: {
-            type: String,
-            trim: true,
-            required: true,
-        },
-        id: {
-            type: ObjectId,
-            required: true,
-            ref: "Company"
-        }
-    },
-    deadline: {
-        type: Date,
-        required: true
-    },
-    skills: [{
-        type: String
-    }],
-    openings: {
-        type: Number,
-        required: true
     },
     location: {
         type: String,
         lowercase: true
     },
+    job: [{
+        type: ObjectId,
+        ref: "Job"
+    }],
     hiringManager: {
         name: String,
         contactNumber: String,
@@ -64,6 +46,6 @@ const jobSchema = mongoose.Schema({
 })
 
 
-const Job = mongoose.model("Job", jobSchema)
+const Company = mongoose.model("Company", companySchema)
 
-module.exports = Job;
+module.exports = Company;
