@@ -1,4 +1,4 @@
-const { createHiringManagerService, getHiringManagersService } = require("../services/hiringManager.services")
+const { createHiringManagerService, getHiringManagerJobsService } = require("../services/hiringManager.services")
 
 
 exports.createHiringManager = async (req, res, next) => {
@@ -17,9 +17,9 @@ exports.createHiringManager = async (req, res, next) => {
         })
     }
 }
-exports.getHiringManagers = async (req, res, next) => {
+exports.getHiringManagerJob = async (req, res, next) => {
     try {
-        const hiringManagers = await getHiringManagersService()
+        const hiringManagers = await getHiringManagerJobsService(req.user?.email)
 
         res.status(200).json({
             status: "Success",

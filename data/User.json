@@ -1,0 +1,14 @@
+[
+    {
+        "email": "salman.dnj@gmail.com",
+        "password": "mezba123456#A",
+        "confirmPassword": "mezba123456#A",
+        "firstName": "Mezbaul Abed",
+        "lastName": "Forzan",
+        "shippingAddress": "944 osthir Street",
+        "presentAddress": "944 osthir Street",
+        "permanentAddress": "944 Russell Street",
+        "imageURL": "https://i.ibb.co/WnFSs9Y/unnamed.webp",
+        "role": "candidate"
+    }
+]
