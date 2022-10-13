@@ -8,7 +8,7 @@ const app = require("./app");
 // mongoose.connect(process.env.DATABASE_LOCAL).then(() => {
 //     console.log("Database in Connected".red.bold)
 // })
-mongoose.connect(process.env.DATABASE_LOCAL, {
+mongoose.connect("mongodb+srv://dbuser1:yhHR4E8ZXY05LYMB@cluster0.fr7f4kz.mongodb.net/job-portal?retryWrites=true&w=majority", {
 
     useNewUrlParser: "true",
     useUnifiedTopology: "true"
