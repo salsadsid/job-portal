@@ -54,6 +54,10 @@ const jobSchema = mongoose.Schema({
             ref: "HiringManager"
         }
     },
+    appliedCandidatesId: [{
+        type: ObjectId,
+        ref: "Candidate",
+    }],
     status: {
         type: String,
         enum: ["active", "inactive"],

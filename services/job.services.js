@@ -1,4 +1,6 @@
 const Job = require('../models/Job');
+const Candidate = require('../models/Candidate');
+const ApplyInfo = require('../models/ApplyInfo');
 const Company = require('../models/Company');
 const HiringManager = require('../models/HiringManager');
 
@@ -35,3 +37,11 @@ exports.getJobsService = async (filters, queries) => {
     return { total, page, jobs }
 }
 
+exports.findJobById = async (id) => {
+    const job = await Job.findOne({ _id: id })
+    return job
+}
+exports.findApplyInfoById = async (id) => {
+    const applyInfo = await ApplyInfo.findOne({ jobId: id })
+    return applyInfo
+}

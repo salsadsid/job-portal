@@ -1,5 +1,6 @@
-const { createJobService, getJobsService } = require("../services/job.services")
-
+const { createJobService, getJobsService, findJobById, findCandidateByEmail, findCandidateById, findApplyInfoById } = require("../services/job.services")
+const Candidate = require('../models/Candidate');
+const ApplyInfo = require('../models/ApplyInfo');
 exports.createJob = async (req, res, next) => {
     try {
 
@@ -68,6 +69,54 @@ exports.getJobs = async (req, res, next) => {
         res.status(400).json({
             status: "fail",
             message: "Can't get the data",
+            error: error.message
+        })
+    }
+}
+
+exports.apply = async (req, res, next) => {
+    try {
+        const { id } = req.params
+        const job = await findJobById(id);
+        if (!job) {
+            return res.status(401).json({
+                status: "Fail",
+                message: "Can't find this job by this id"
+            })
+        }
+
+        const expired = new Date() > new Date(job.deadline)
+        if (expired) {
+            return res.status(401).json({
+                status: "Fail",
+                error: "Deadline Expired"
+            })
+        }
+        const { _id: jobId } = job
+
+        const applyInfo = await findApplyInfoById(jobId)
+        const { candidateId } = applyInfo
+        if (candidateId.includes(candidate._id)) {
+            return res.status(401).json({
+                status: "Fail",
+                message: "Already Applied"
+            })
+        }
+        // const { _id: candidateId } = candidate
+
+        const res1 = await Candidate.updateOne(
+            { _id: candidateId },
+            { $push: { appliedJobs: jobId } }
+        )
+        const res2 = await ApplyInfo.updateOne(
+            { _id: jobId },
+            { $push: { CandidateId: candidateId } }
+        )
+
+    } catch (error) {
+        res.status(400).json({
+            status: "fail",
+            message: "Apply Failed",
             error: error.message
         })
     }
