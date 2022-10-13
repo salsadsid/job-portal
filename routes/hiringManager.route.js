@@ -7,5 +7,6 @@ const router = express.Router()
 router.route('/').post(hiringManagerController.createHiringManager)
 
 router.route('/jobs').get(verifyToken, authorization("hiring-manager"), hiringManagerController.getHiringManagerJob)
+router.route('/jobs/:id').get(verifyToken, authorization("hiring-manager"), hiringManagerController.getHiringManagerJobDetails)
 
 module.exports = router;

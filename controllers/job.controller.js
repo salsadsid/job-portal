@@ -1,6 +1,7 @@
-const { createJobService, getJobsService, findJobById, findCandidateByEmail, findCandidateById, findApplyInfoById } = require("../services/job.services")
+const { createJobService, getJobsService, findJobById, findCandidateByEmail, findCandidateById, findApplyInfoById, findCandidateByJobId, findApplyInfoByJobId } = require("../services/job.services")
 const Candidate = require('../models/Candidate');
 const ApplyInfo = require('../models/ApplyInfo');
+const Job = require('../models/Job');
 exports.createJob = async (req, res, next) => {
     try {
 
@@ -94,24 +95,50 @@ exports.apply = async (req, res, next) => {
         }
         const { _id: jobId } = job
 
-        const applyInfo = await findApplyInfoById(jobId)
-        const { candidateId } = applyInfo
-        if (candidateId.includes(candidate._id)) {
+        const appliedCandidate = await findApplyInfoByJobId(jobId)
+
+        if (appliedCandidate.candidateId == false) {
             return res.status(401).json({
                 status: "Fail",
-                message: "Already Applied"
+                error: "Add to ApplyInfo Collection fast"
             })
         }
+        const { candidateId } = appliedCandidate
+
+        const candidate = await findCandidateById(candidateId)
+        const { appliedJobs } = candidate
+        if (appliedJobs.includes(jobId)) {
+            return res.status(401).json({
+                status: "Fail",
+                error: "Already applied"
+            })
+        }
+        // const { candidateId } = applyInfo
+        // if (candidateId.includes(candidate._id)) {
+        //     return res.status(401).json({
+        //         status: "Fail",
+        //         message: "Already Applied"
+        //     })
+        // }
         // const { _id: candidateId } = candidate
 
         const res1 = await Candidate.updateOne(
-            { _id: candidateId },
+            { _id: candidate._id },
             { $push: { appliedJobs: jobId } }
         )
-        const res2 = await ApplyInfo.updateOne(
-            { _id: jobId },
-            { $push: { CandidateId: candidateId } }
+        const res2 = await Candidate.updateOne(
+            { _id: candidate._id },
+            { $push: { resume: req.files.path } }
         )
+        const res3 = await Job.updateOne(
+            { _id: jobId },
+            { $push: { appliedCandidatesId: candidate._id } }
+        )
+        return res.status(200).json({
+            status: "success",
+            error: "Successfully Applied",
+            data: req.files
+        })
 
     } catch (error) {
         res.status(400).json({

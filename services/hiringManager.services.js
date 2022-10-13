@@ -15,3 +15,21 @@ exports.getHiringManagerJobsService = async (email) => {
     // console.log(getjobs);
     return getjobs
 }
+exports.getHiringManagerJobDetailsService = async (id) => {
+    const jobDetails = await Job.find({ _id: id }).populate('appliedCandidatesId').populate('hiringManager')
+    // console.log(hiringManager);
+    // console.log(hiringManager[0].job);
+    // const jobs = hiringManager[0].job
+    // const getjobs = await Job.find({ _id: jobs })
+    // console.log(getjobs);
+    return jobDetails
+}
+exports.updateAJobService = async (id, data) => {
+    const jobDetails = await Job.updateOne({ _id: id }, data)
+    // console.log(hiringManager);
+    // console.log(hiringManager[0].job);
+    // const jobs = hiringManager[0].job
+    // const getjobs = await Job.find({ _id: jobs })
+    // console.log(getjobs);
+    return jobDetails
+}

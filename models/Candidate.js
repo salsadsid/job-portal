@@ -15,7 +15,9 @@ const candidateSchema = mongoose.Schema({
         validate: [validator.isEmail, "Please provide a valid email"],
         lowercase: true
     },
-    resume: String,
+    resume: [{
+        type: String,
+    }],
     appliedJobs: [{
         type: ObjectId,
         ref: "Job"

@@ -30,8 +30,6 @@ exports.getJobsService = async (filters, queries) => {
         .limit(queries.limit)
         .select(queries.fields)
         .sort(queries.sortBy)
-        .populate("company.id")
-        .populate("hiringManager.id")
     const total = await Job.countDocuments(filters)
     const page = Math.ceil(total / queries.limit)
     return { total, page, jobs }
@@ -41,7 +39,11 @@ exports.findJobById = async (id) => {
     const job = await Job.findOne({ _id: id })
     return job
 }
-exports.findApplyInfoById = async (id) => {
-    const applyInfo = await ApplyInfo.findOne({ jobId: id })
+exports.findApplyInfoByJobId = async (jobId) => {
+    const applyInfo = await ApplyInfo.findOne({ jobId })
     return applyInfo
+}
+exports.findCandidateById = async (id) => {
+    const candidate = await Candidate.findOne({ _id: id })
+    return candidate
 }
